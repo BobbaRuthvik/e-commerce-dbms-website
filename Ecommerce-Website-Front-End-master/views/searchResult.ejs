@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Search results....</title>
+</head>
+
+<body>
+  <% practices.forEach(function (practice) { %>
+    <%var temp = practice.name%>
+    <%console.log(temp)%>
+    <%console.log(searchString)%>
+    <%console.log(temp.search(searchString))%>
+    <%if(temp.search(searchString)!==-1) {%>
+      <p><%= practice.name %></p>
+    <%}%>
+  <!-- note you defined the field as Name not name -->
+  <% }) %>
+</body>
+
+</html>
