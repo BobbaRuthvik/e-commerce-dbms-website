@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Search results....</title>
+</head>
+
+<body>
+  <% practices.forEach(function (practice) { %>
+    <%if(userId === practice.userId) {%>
+      <p><%= practice.name %></p>
+    <%}%>
+  <!-- note you defined the field as Name not name -->
+  <% }) %>
+</body>
+
+</html>
