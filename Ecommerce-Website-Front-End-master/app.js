@@ -45,6 +45,10 @@ app.get("/products", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/products.html'));
 })
 
+app.get("/signup", function(req, res) {
+  res.sendFile(path.join(__dirname, 'views/signup.html'));
+})
+
 app.get("/check", function(req, res) {
 
   // Products.findOne({
