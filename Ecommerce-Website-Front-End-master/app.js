@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 var fs = require('fs');
 
 const Products = require('./models/product.model')
+const Cart = require('./models/cart.model')
 
 // app.use(bodyParser.urlencoded({
 //   extended: true
@@ -46,6 +47,24 @@ app.get("/products", function(req, res) {
 })
 
 app.get("/check", function(req, res) {
+
+  var userId = "1";
+
+  Cart.find({}, function(err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+
+      // res.send(JSON.stringify(result));
+      console.log(JSON.stringify(result));
+
+      res.render('dummy_cart', {
+        userId: userId,
+        practices: result
+      })
+    }
+  })
+
 
   // Products.findOne({
   //   "name": {
