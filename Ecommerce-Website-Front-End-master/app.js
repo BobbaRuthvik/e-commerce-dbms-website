@@ -9,10 +9,13 @@ var fs = require('fs');
 
 const Products = require('./models/product.model')
 const Cart = require('./models/cart.model')
+const Register = require('./models/register.model');
+const { json } = require("express");
 
 // app.use(bodyParser.urlencoded({
 //   extended: true
 // }));
+
 
 app.use(bodyParser.urlencoded({
   extended: false
@@ -49,6 +52,31 @@ app.get("/products", function(req, res) {
 app.get("/signup", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/signup.html'));
 })
+
+app.post("/signup", async(req, res) => {
+  try {
+
+    // console.log(req.body.name);
+    // res.send(req.body.name);
+
+    const registerUser = new Register({
+      name : req.body.name,
+      email : req.body.email,
+      password : req.body.password,
+      phone : req.body.phone,
+      city : req.body.city,
+      address : req.body.address
+    })
+
+    const registered = await registerUser.save();
+    console.log(registerUser);
+    res.send(registerUser);
+    // res.status(201).render("views/index.html");
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
 
 app.get("/check", function(req, res) {
 

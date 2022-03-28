@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const signupSchema = new mongoose.Schema({
-    Name : {
+    name : {
         type: String,
         required: true
     },
@@ -10,7 +10,11 @@ const signupSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    contact : {
+    password : {
+        type: String,
+        required: true
+    },
+    phone : {
         type: String,
         required: true
     },
@@ -22,12 +26,7 @@ const signupSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password : {
-        type: String,
-        required: true
-    }
 })
 
 const  Register = new mongoose.model("Resgiter",signupSchema);
-
 module.exports = Register;
