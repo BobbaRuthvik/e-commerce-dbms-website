@@ -30,10 +30,10 @@ app.set("view engine", "ejs");
 
 // connect with mysql
 var mysqlConnection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "balance",
+  host: "br3q3frbqca53938jvl2-mysql.services.clever-cloud.com",
+  user: "udtc3v1boae5qogq",
+  password: "J1DYLKRrGzGy0mcZ9JDR",
+  database: "br3q3frbqca53938jvl2",
   multipleStatements: true
 });
 
