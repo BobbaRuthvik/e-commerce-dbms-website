@@ -5,6 +5,7 @@ const path = require("path")
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const mysql = require('mysql')
+const multer = require('multer');
 
 var fs = require('fs');
 
@@ -14,6 +15,16 @@ const Cart = require('./models/cart.model')
 
 // global variables for user
 var isLogin = 0;
+var loginDetails = {
+  id: "NULL",
+  name: "NULL",
+  email: "NULL",
+  password: "NULL",
+  phone: "NULL",
+  city: "NULL",
+  address: "NULL"
+}
+
 //TODO: Use isLogin variable
 
 // app.use(bodyParser.urlencoded({
@@ -54,11 +65,62 @@ mongoose.connect('mongodb+srv://dbmsKali:2455bobba@dbmskali.biyrt.mongodb.net/E-
 app.use('*/css', express.static('public/css'));
 app.use('*/js', express.static('public/js'));
 app.use('*/images', express.static('public/images'));
+app.use(express.static('uploads'));
 
 mongoose.connection.once('open', function() {
   console.log('Database connection has been made');
 }).on('error', function(error) {
   console.log('error is:', error);
+})
+
+//Schema for uploading image
+userSchema = new mongoose.Schema ({
+  seller_id: String,
+  product_name: String,
+  product_description: String,
+  image: String
+});
+
+userModel = mongoose.model ('user', userSchema);
+
+var upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads');
+    },
+    filename: function (req, file, callback){
+      callback(null, file.filename + '-' + Date.now() + path.extname(file.originalname))
+    }
+  })
+})
+
+// Image dealing opsts and gets
+app.post('/sell', upload.single('image'), (req, res)=>{
+  console.log(req.file);
+  var x = new userModel();
+  x.seller_id = loginDetails.id;
+  x.product_name = req.body.product_name;
+  x.product_description = req.body.product_description;
+  x.image = req.file.filename;
+  x.save((err, doc)=>{
+    if(!err){
+      console.log("Saved Successfully");
+      res.redirect('/users');
+    }
+    else{
+      console.log(err);
+    }
+  })
+})
+
+app.get('/users', (req, res)=>{
+  var userId = loginDetails.id;
+  userModel.find().then(function(doc){
+    res.render('user', {
+      item: doc,
+      userId: userId
+    })
+  })
 })
 
 // Create DB
@@ -139,6 +201,10 @@ app.get("/seller", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/seller.html'));
 })
 
+app.get("/sell", function(req, res) {
+  res.sendFile(path.join(__dirname, 'views/sell.html'));
+})
+
 app.get("/products", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/products.html'));
 })
@@ -172,6 +238,15 @@ app.post("/signup", async (req, res) => {
 })
 
 app.get("/login", function(req, res) {
+  loginDetails = {
+    id: "NULL",
+    name: "NULL",
+    email: "NULL",
+    password: "NULL",
+    phone: "NULL",
+    city: "NULL",
+    address: "NULL"
+  }
   res.sendFile(path.join(__dirname, 'views/login.html'));
 })
 
@@ -203,22 +278,32 @@ app.post("/login", (req, res) => {
       console.log('User details unavailable');
       res.redirect('/signup');
     } else {
-      isLogin = 1;
-      res.redirect('/products');
+      // isLogin = 1;
+      loginDetails.id = doc.id;
+      loginDetails.name = doc.name;
+      loginDetails.email = doc.email;
+      loginDetails.password = doc.password;
+      loginDetails.phone = doc.phone;
+      loginDetails.address = doc.address;
+      // res.redirect('/products');
+      res.redirect('/seller');
     }
   })
 })
 
 app.get("/cart", function(req, res) {
-  var userId = "1";
+  var userId = loginDetails.id;
 
-  Cart.find({}, function(err, result) {
+  Products.find({}, function(err, result) {
     if (err) {
       res.send(err);
     } else {
 
       // res.send(JSON.stringify(result));
-      console.log(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
+
+      console.log(userId);
+      console.log(result);
 
       res.render('dummy_cart', {
         userId: userId,
