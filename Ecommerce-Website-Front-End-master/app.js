@@ -74,48 +74,49 @@ mongoose.connection.once('open', function() {
 })
 
 //Schema for uploading image
-userSchema = new mongoose.Schema ({
+userSchema = new mongoose.Schema({
   seller_id: String,
   product_name: String,
   product_description: String,
+  product_price: Number, // check if it's number or int or anything else
   image: String
 });
 
-userModel = mongoose.model ('user', userSchema);
+userModel = mongoose.model('user', userSchema);
 
 var upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads');
     },
-    filename: function (req, file, callback){
+    filename: function(req, file, callback) {
       callback(null, file.filename + '-' + Date.now() + path.extname(file.originalname))
     }
   })
 })
 
 // Image dealing opsts and gets
-app.post('/sell', upload.single('image'), (req, res)=>{
+app.post('/sell', upload.single('image'), (req, res) => {
   console.log(req.file);
   var x = new userModel();
   x.seller_id = loginDetails.id;
   x.product_name = req.body.product_name;
   x.product_description = req.body.product_description;
+  x.product_price = req.body.product_price;
   x.image = req.file.filename;
-  x.save((err, doc)=>{
-    if(!err){
+  x.save((err, doc) => {
+    if (!err) {
       console.log("Saved Successfully");
       res.redirect('/users');
-    }
-    else{
+    } else {
       console.log(err);
     }
   })
 })
 
-app.get('/users', (req, res)=>{
+app.get('/users', (req, res) => {
   var userId = loginDetails.id;
-  userModel.find().then(function(doc){
+  userModel.find().then(function(doc) {
     res.render('user', {
       item: doc,
       userId: userId
@@ -206,7 +207,26 @@ app.get("/sell", function(req, res) {
 })
 
 app.get("/products", function(req, res) {
-  res.sendFile(path.join(__dirname, 'views/products.html'));
+  // res.sendFile(path.join(__dirname, 'views/products.html'));
+  // var userId = loginDetails.id;
+
+  userModel.find({}, function(err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+
+      // res.send(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
+
+      // console.log(userId);
+      console.log(result);
+
+      res.render('products', {
+        // userId: userId,
+        practices: result
+      })
+    }
+  })
 })
 
 app.get("/signup", function(req, res) {
@@ -285,16 +305,83 @@ app.post("/login", (req, res) => {
       loginDetails.password = doc.password;
       loginDetails.phone = doc.phone;
       loginDetails.address = doc.address;
-      // res.redirect('/products');
-      res.redirect('/seller');
+      res.redirect('/products');
+      // res.redirect('/seller');
     }
   })
 })
 
+app.get('/check', function(req, res) {
+  res.sendFile(path.join(__dirname, 'views/cart.html'));
+})
+
+app.get('/check/:productId', function(req, res) {
+  var productId = req.params.productId;
+  const addToCart = {
+    buyer_id: "NULL",
+    seller_id: "NULL",
+    product_name: "NULL",
+    product_description: "NULL",
+    product_price: -1,
+    image: "NULL"
+  };
+
+  console.log("id: " + productId);
+
+  //Get product data
+  userModel.findOne({
+    _id: productId
+  }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else if (!doc) {
+      console.log('User details unavailable');
+      res.send('User details unavailable');
+    } else {
+      addToCart.buyer_id = loginDetails.id;
+      addToCart.seller_id = doc.seller_id;
+      addToCart.product_name = doc.product_name;
+      addToCart.product_description = doc.product_description;
+      addToCart.product_price = doc.product_price;
+      addToCart.image = doc.image;
+
+      //Save in Database
+      const addToDB = new Cart({
+        buyer_id: addToCart.buyer_id,
+        seller_id: addToCart.seller_id,
+        product_name: addToCart.product_name,
+        product_description: addToCart.product_description,
+        product_price: addToCart.product_price,
+        image: addToCart.image
+      })
+
+      addToDB.save()
+        .then(item => {
+          // res.send(item);
+          res.redirect('/cart');
+        })
+        .catch(err => {
+          res.send(err)
+        });
+
+      // res.send(addToCart);
+    }
+  })
+
+
+
+  // res.send(addToCart);
+
+  // Update cart
+  // res.send(req.params.productId);
+  // res.sendFile(path.join(__dirname, 'views/cart.html'));
+})
+
+
 app.get("/cart", function(req, res) {
   var userId = loginDetails.id;
 
-  Products.find({}, function(err, result) {
+  Cart.find({}, function(err, result) {
     if (err) {
       res.send(err);
     } else {
@@ -306,7 +393,8 @@ app.get("/cart", function(req, res) {
       console.log(result);
 
       res.render('dummy_cart', {
-        userId: userId,
+        // userId: userId,
+        userId: "NULL",
         practices: result
       })
     }
