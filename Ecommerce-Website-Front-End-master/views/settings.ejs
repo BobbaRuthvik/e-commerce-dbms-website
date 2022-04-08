@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Settings | Life Style Store</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!--jQuery library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!--Latest compiled and minified JavaScript-->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/index.css" rel="stylesheet" type="text/css" />
+
+  <style media="screen">
+    .alert {
+      padding: 20px;
+      background-color: #f44336;
+      color: white;
+    }
+
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .closebtn:hover {
+      color: black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/products">Lifestyle Store</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a></li>
+          <li><a href="/settings"><span class="glyphicon glyphicon-user"></span> Settings </a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="container settings">
+    <%if(flag===0){%>
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>All Ok!</strong> This is just a test action.
+    </div>
+    <%}%>
+    <%if(flag===1){%>
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Alert!</strong> Re-type password does not match with new password entered.
+    </div>
+    <%}%>
+    <%if(flag===2){%>
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Alert!</strong> Old password entered is incorrect, try again.
+    </div>
+    <%}%>
+    <%if(flag===3){%>
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Notification!</strong> Password changed successfully.
+    </div>
+    <%}%>
+    <div class="row">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-4 form">
+        <h1 class="password"> Change Password </h1>
+        <form action="/settings" method="post">
+          <div class="form-group">
+            <input class="form-control" placeholder="Old Password" type="password" name="oldpassword" required="true">
+
+            <br>
+
+            <input class="form-control" placeholder="New Password" type="password" name="newpassword">
+
+            <br>
+
+            <input class="form-control" placeholder="Re-type New Password" type="password" name="retypenewpassword" required="true">
+
+            <br>
+
+            <button class="btn btn-primary" type="submit">Change</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <center>
+        <p>Copyright © Lifestyle Store. All Rights
+          Reserved | Contact Us: +91 90000 00000”. </p>
+      </center>
+    </div>
+  </footer>
+</body>
+
+</html>

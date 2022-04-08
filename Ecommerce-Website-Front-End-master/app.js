@@ -15,6 +15,7 @@ const Cart = require('./models/cart.model')
 
 // global variables for user
 var isLogin = 0;
+var flag = 0;
 var loginDetails = {
   id: "NULL",
   name: "NULL",
@@ -55,6 +56,31 @@ mysqlConnection.connect((err) => {
     console.log(err);
   }
 })
+
+// var connection;
+//
+// function handleDisconnect() {
+//   connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
+//                                                   // the old one cannot be reused.
+//
+//   connection.connect(function(err) {              // The server is either down
+//     if(err) {                                     // or restarting (takes a while sometimes).
+//       console.log('error when connecting to db:', err);
+//       setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+//     }                                     // to avoid a hot loop, and to allow our node script to
+//   });                                     // process asynchronous requests in the meantime.
+//                                           // If you're also serving http, display a 503 error.
+//   connection.on('error', function(err) {
+//     console.log('db error', err);
+//     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+//       handleDisconnect();                         // lost due to either server restart, or a
+//     } else {                                      // connnection idle timeout (the wait_timeout
+//       throw err;                                  // server variable configures this)
+//     }
+//   });
+// }
+//
+// handleDisconnect();
 
 //connect with mongodb
 mongoose.connect('mongodb+srv://dbmsKali:2455bobba@dbmskali.biyrt.mongodb.net/E-commerce', {
@@ -206,6 +232,71 @@ app.get("/sell", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/sell.html'));
 })
 
+app.get("/settings", function(req, res) {
+  flag = 0;
+  res.render('settings', {
+    flag: flag
+  })
+})
+
+app.get("/logout", function(req, res) {
+  res.redirect('/');
+})
+
+app.post("/settings", function(req, res) {
+  let oldpassword = req.body.oldpassword;
+  let newpassword = req.body.newpassword;
+  let retypenewpassword = req.body.retypenewpassword;
+
+  console.log(oldpassword, newpassword, retypenewpassword);
+
+  if (newpassword !== retypenewpassword) {
+    flag = 1;
+    res.render('settings', {
+      flag: flag
+    })
+  } else {
+    Register.findOne({
+      _id: loginDetails.id,
+      password: oldpassword
+    }, (err, doc) => {
+      if (err) {
+        console.log("Stuck here");
+        res.send(err);
+      } else if (!doc) {
+        console.log('User details unavailable');
+        flag = 2;
+        res.render('settings', {
+          flag: flag
+        })
+      } else {
+        console.log("Found user");
+        var myquery = {
+          _id: loginDetails.id
+        };
+
+        var newvalues = {
+          $set: {
+            password: newpassword
+          }
+        };
+
+        Register.updateOne(myquery, newvalues, function(err, response) {
+          if (err) {
+            res.send("Hi");
+          } else {
+            flag = 3;
+            console.log("Password changed");
+            res.render('settings', {
+              flag: flag
+            })
+          }
+        });
+      }
+    })
+  }
+})
+
 app.get("/products", function(req, res) {
   // res.sendFile(path.join(__dirname, 'views/products.html'));
   // var userId = loginDetails.id;
@@ -311,9 +402,9 @@ app.post("/login", (req, res) => {
   })
 })
 
-app.get('/check', function(req, res) {
-  res.sendFile(path.join(__dirname, 'views/cart.html'));
-})
+// app.get('/check', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'views/cart.html'));
+// })
 
 app.get('/check/:productId', function(req, res) {
   var productId = req.params.productId;
@@ -392,9 +483,8 @@ app.get("/cart", function(req, res) {
       console.log(userId);
       console.log(result);
 
-      res.render('dummy_cart', {
-        // userId: userId,
-        userId: "NULL",
+      res.render('cart', {
+        userId: userId,
         practices: result
       })
     }
@@ -405,7 +495,7 @@ app.post("/search_results", function(req, res) {
   console.log(req.body.searchText);
   var searchString = req.body.searchText;
 
-  Products.find({}, function(err, result) {
+  Cart.find({}, function(err, result) {
     if (err) {
       res.send(err);
     } else {
