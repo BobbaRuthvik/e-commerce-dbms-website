@@ -161,12 +161,15 @@ app.get('/createdb', (req, res) => {
 });
 
 // Create table
-app.get('/createbalancetable', (req, res) => {
-  let sql = 'CREATE TABLE user(id VARCHAR(255), username VARCHAR(255), balance int, PRIMARY KEY (id))';
+app.get('/createtables', (req, res) => {
+  // 624ecace19326b6e224c7b8b
+  // 624d3d0f492d8613e39f9ebd
+
+  let sql = 'CREATE TABLE seller (idseller VARCHAR(45) NOT NULL,s_balance INT NULL,PRIMARY KEY (idseller)); CREATE TABLE buyer (idbuyer VARCHAR(45) NOT NULL, b_balance INT NULL, PRIMARY KEY (idbuyer)); INSERT INTO buyer VALUES ("624ecace19326b6e224c7b8b", 5000); INSERT INTO seller VALUES ("624d3d0f492d8613e39f9ebd", 0); UPDATE buyer SET b_balance = buyer.b_balance - 1000 WHERE idbuyer = "624ecace19326b6e224c7b8b"; UPDATE seller SET s_balance = seller.s_balance + 1000 WHERE idseller = "624d3d0f492d8613e39f9ebd";';
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
-    res.send('Database created...');
+    res.send('seller table created...');
   });
 });
 
@@ -230,6 +233,34 @@ app.get("/seller", function(req, res) {
 
 app.get("/sell", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/sell.html'));
+})
+
+
+app.post("/transaction", function(req, res) {
+  // res.sendFile(path.join(__dirname, 'views/sell.html'));
+  var buyer_id = loginDetails.id;
+  Cart.findOne({
+    buyer_id
+  }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else if (!doc) {
+      console.log('User details unavailable');
+      res.redirect('/signup');
+    } else {
+      // // isLogin = 1;
+      // loginDetails.id = doc.id;
+      // loginDetails.name = doc.name;
+      // loginDetails.email = doc.email;
+      // loginDetails.password = doc.password;
+      // loginDetails.phone = doc.phone;
+      // loginDetails.address = doc.address;
+      // res.redirect('/products');
+      // // res.redirect('/seller');
+      var seller_id = doc.seller_id;
+      var item_price = doc.product_price;
+    }
+  })
 })
 
 app.get("/settings", function(req, res) {
