@@ -49,13 +49,41 @@ var mysqlConnection = mysql.createConnection({
   multipleStatements: true
 });
 
-mysqlConnection.connect((err) => {
-  if (!err) {
-    console.log("Connected to mySQL");
-  } else {
-    console.log(err);
-  }
-})
+// mysqlConnection.connect((err) => {
+//   if (!err) {
+//     console.log("Connected to mySQL");
+//   } else {
+//     // console.log(err);\
+//     console.log(err.code);
+//     console.log(err.fatal);
+//   }
+// })
+
+
+var connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
+
+handleDisconnect();
 
 // var connection;
 //
@@ -222,6 +250,21 @@ app.get('/deleteuser/:username', (req, res) => {
 app.get("/", function(req, res) {
   isLogin = 0;
   res.sendFile(path.join(__dirname, 'views/index.html'));
+})
+
+app.get("/success", function(req, res) {
+  isLogin = 0;
+  res.sendFile(path.join(__dirname, 'views/success.html'));
+})
+
+app.get("/track", function(req, res) {
+  isLogin = 0;
+  res.sendFile(path.join(__dirname, 'views/track.html'));
+})
+
+app.get("/progress", function(req, res) {
+  isLogin = 0;
+  res.sendFile(path.join(__dirname, 'views/progress.html'));
 })
 
 app.get("/seller", function(req, res) {

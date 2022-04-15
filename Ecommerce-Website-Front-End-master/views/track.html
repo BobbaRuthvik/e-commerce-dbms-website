@@ -44,27 +44,30 @@
               <th>Item Number</th>
               <th>Item Name</th>
               <th>Price</th>
+              <th>Check Status</th>
               <th></th>
             </tr>
-            <% var sum = 0; %>
+            <!-- <% var sum = 0; %>
             <%  var idx = 1 %>
             <% practices.forEach(function (practice) { %>
-            <%if(userId === practice.buyer_id) {%>
+            <%if(userId === practice.buyer_id) {%> -->
             <tr>
               <th><%= idx %></th>
-              <%  idx = idx + 1 %>
+              <!-- <%  idx = idx + 1 %> -->
               <th><%=practice.product_name%></th>
               <th>Rs <%=practice.product_price%></th>
-              <% sum = sum + practice.product_price; %>
-              <th></th>
+              <!-- <% sum = sum + practice.product_price; %> -->
+              <th><a href="/progress" target="_blank">Click here</a></th>
             </tr>
-            <% } %>
-            <% }) %>
+            <!-- <% } %>
+            <% }) %> -->
             <tr>
               <th></th>
               <th>Total</th>
               <th>Rs <%=sum%></th>
-              <th><button class="btn btn-primary" type="submit"><a href="/success">Confirm Order</a></button></th>
+              <!-- <th><button class="btn btn-primary" type="submit"><a href="/success">Confirm Order</a></button></th> -->
+              <th></th>
+              <th></th>
             </tr>
           </tbody>
         </table>

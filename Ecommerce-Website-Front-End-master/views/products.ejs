@@ -55,6 +55,7 @@
     .search_bar button:hover {
       background: #ccc;
     }
+
   </style>
 
 
@@ -98,18 +99,19 @@
 
 
     <% practices.forEach(function (practice) { %>
-        <!-- <p><%= practice.name %></p> -->
-        <div class="col-md-3 col-sm-6 home-feature">
-          <div class="thumbnail">
-            <img src="<%=practice.image%>" alt="" height="160px" width="160px">
-            <div class="caption">
-              <h3><%=practice.product_name%></h3>
-              <p>Price: Rs. <%=practice.product_price%></p>
-            </div>
-            <!-- <%console.log("Print ID: " + practice._id)%> -->
-            <button type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button>
-          </div>
+    <!-- <p><%= practice.name %></p> -->
+    <div class="col-md-3 col-sm-6 home-feature">
+      <div class="thumbnail">
+        <img src="<%=practice.image%>" alt="Image not found" onerror="this.onerror=null; this.src='images/5.jpg'">
+        <!-- <div class="img" style="background-image:url('<%=practice.image%>');"></div> -->
+        <div class="caption">
+          <h3><%=practice.product_name%></h3>
+          <p>Price: Rs. <%=practice.product_price%></p>
         </div>
+        <!-- <%console.log("Print ID: " + practice._id)%> -->
+        <button type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button>
+      </div>
+    </div>
     <% }) %>
 
 
