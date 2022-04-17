@@ -1,81 +1,92 @@
 <!DOCTYPE html>
-    <head>
-        <title>Sign UP | Life Style Store</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 
-        <!--jQuery library-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<head>
+  <title>Sign UP | Life Style Store</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-        <!--Latest compiled and minified JavaScript-->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="index.css" rel="stylesheet" type="text/css"/>
+  <!--jQuery library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Lifestyle Store</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <br><br><br>
-        <div class="container signup">
-            <div class="row">
-                <div class="col-xs-4"></div>
-                <div class="col-xs-4 form">
-                    <h1 style="text-align: center; font-size: x-large;"> Register Yourself Now! </h1><br>
-                    <form action="/signup" method="post">
-                        <div class="form-group" >
-                                <input class="form-control" placeholder="Name" type="text" name="name" required="true">
+  <!--Latest compiled and minified JavaScript-->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="index.css" rel="stylesheet" type="text/css" />
 
-                                <br>
+</head>
 
-                                <input class="form-control" placeholder="Email" type="text" name="email" required="true">
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Lifestyle Store</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br><br><br>
+  <div class="container signup">
+    <div class="row">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-4 form">
+        <h1 style="text-align: center; font-size: x-large;"> Register Yourself Now! </h1><br>
+        <form action="/signup" method="post">
+          <div class="form-group">
+            <input class="form-control" placeholder="Name" type="text" name="name" required="true">
 
-                                <br>
+            <br>
 
-                                <input class="form-control" placeholder="Password" type="password" name="password" required="true">
+            <input class="form-control" placeholder="Email" type="text" name="email" required="true">
 
-                                <br>
+            <br>
 
-                                <input class="form-control" placeholder="Contact" type="text" name="phone" required="true">
+            <input class="form-control" placeholder="Password" type="password" name="password" required="true">
 
-                                <br>
+            <br>
 
-                                <input class="form-control" placeholder="City" type="text" name="city" required="true">
+            <input class="form-control" placeholder="Contact" type="text" name="phone" required="true">
 
-                                <br>
-                                <input class="form-control" placeholder="Address" type="text" name="address" required="true">
+            <br>
 
-                                <br>
+            <input class="form-control" placeholder="City" type="text" name="city" required="true">
 
-                    <button class="btn btn-primary" type="submit">Sign Up</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <footer>
-                <div class="container">
-                    <center>
-                     <p>Copyright © Lifestyle Store. All Rights
-                    Reserved | Contact Us: +91 90000 00000”. </p>
-                    </center>
-                </div>
-        </footer>
-    </body>
+            <br>
+            <input class="form-control" placeholder="Address" type="text" name="address" required="true">
+
+            <br>
+
+            <select name="type" id="cars">
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+            </select>
+
+            <br>
+            <br>
+
+            <button class="btn btn-primary" type="submit">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <center>
+        <p>Copyright © Lifestyle Store. All Rights
+          Reserved | Contact Us: +91 90000 00000”. </p>
+      </center>
+    </div>
+  </footer>
+</body>
+
 </html>

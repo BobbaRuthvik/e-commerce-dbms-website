@@ -23,7 +23,8 @@ var loginDetails = {
   password: "NULL",
   phone: "NULL",
   city: "NULL",
-  address: "NULL"
+  address: "NULL",
+  type: "NULL"
 }
 
 //TODO: Use isLogin variable
@@ -49,41 +50,41 @@ var mysqlConnection = mysql.createConnection({
   multipleStatements: true
 });
 
-// mysqlConnection.connect((err) => {
-//   if (!err) {
-//     console.log("Connected to mySQL");
-//   } else {
-//     // console.log(err);\
-//     console.log(err.code);
-//     console.log(err.fatal);
-//   }
-// })
+mysqlConnection.connect((err) => {
+  if (!err) {
+    console.log("Connected to mySQL");
+  } else {
+    // console.log(err);\
+    console.log(err.code);
+    console.log(err.fatal);
+  }
+})
 
 
-var connection;
-
-function handleDisconnect() {
-  connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
-                                                  // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-
-handleDisconnect();
+// var connection;
+//
+// function handleDisconnect() {
+//   connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
+//                                                   // the old one cannot be reused.
+//
+//   connection.connect(function(err) {              // The server is either down
+//     if(err) {                                     // or restarting (takes a while sometimes).
+//       console.log('error when connecting to db:', err);
+//       setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+//     }                                     // to avoid a hot loop, and to allow our node script to
+//   });                                     // process asynchronous requests in the meantime.
+//                                           // If you're also serving http, display a 503 error.
+//   connection.on('error', function(err) {
+//     console.log('db error', err);
+//     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+//       handleDisconnect();                         // lost due to either server restart, or a
+//     } else {                                      // connnection idle timeout (the wait_timeout
+//       throw err;                                  // server variable configures this)
+//     }
+//   });
+// }
+//
+// handleDisconnect();
 
 // var connection;
 //
@@ -401,7 +402,7 @@ app.get("/signup", function(req, res) {
 app.post("/signup", async (req, res) => {
   try {
 
-    // console.log(req.body.name);
+    console.log(req.body);
     // res.send(req.body.name);
 
     const registerUser = new Register({
@@ -410,13 +411,15 @@ app.post("/signup", async (req, res) => {
       password: req.body.password,
       phone: req.body.phone,
       city: req.body.city,
-      address: req.body.address
+      address: req.body.address,
+      type: req.body.type
     })
 
     const registered = await registerUser.save();
     console.log(registerUser);
-    res.send(registerUser);
+    // res.send(registerUser.type);
     // res.status(201).render("views/index.html");
+    res.redirect("/login");
   } catch (error) {
     res.status(400).send(error);
   }
@@ -430,22 +433,23 @@ app.get("/login", function(req, res) {
     password: "NULL",
     phone: "NULL",
     city: "NULL",
-    address: "NULL"
+    address: "NULL",
+    type: "NULL"
   }
   res.sendFile(path.join(__dirname, 'views/login.html'));
 })
 
-app.post("/signup", async (req, res) => {
-  try {
-
-    const registered = await registerUser.save();
-    console.log(registerUser);
-    res.send(registerUser);
-    // res.status(201).render("views/index.html");
-  } catch (error) {
-    res.status(400).send(error);
-  }
-})
+// app.post("/signup", async (req, res) => {
+//   try {
+//
+//     const registered = await registerUser.save();
+//     console.log(registerUser);
+//     res.send(registerUser);
+//     // res.status(201).render("views/index.html");
+//   } catch (error) {
+//     res.status(400).send(error);
+//   }
+// })
 
 
 app.post("/login", (req, res) => {
@@ -470,8 +474,13 @@ app.post("/login", (req, res) => {
       loginDetails.password = doc.password;
       loginDetails.phone = doc.phone;
       loginDetails.address = doc.address;
-      res.redirect('/products');
-      // res.redirect('/seller');
+      loginDetails.type = doc.type;
+      if (doc.type === "buyer") {
+        res.redirect('/products');
+      }
+      if (doc.type === "seller") {
+        res.redirect('/seller');
+      }
     }
   })
 })

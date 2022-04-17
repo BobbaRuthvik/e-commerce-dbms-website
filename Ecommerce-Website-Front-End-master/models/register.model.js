@@ -26,6 +26,10 @@ const signupSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    type: {
+      type: String,
+      required: true
+    }
 })
 
 const  Register = new mongoose.model("Resgiter",signupSchema);
