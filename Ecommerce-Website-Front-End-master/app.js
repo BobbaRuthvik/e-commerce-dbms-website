@@ -256,6 +256,34 @@ app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, 'views/index.html'));
 })
 
+app.get("/wallet", function(req, res) {
+  var userId = loginDetails.id;
+  var balance = -1;
+  // find balance here pass it to variablr balance
+  res.render('wallet');
+})
+
+app.get("/inventory", function(req, res) {
+  var userId = loginDetails.id;
+  userModel.find({}, function(err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+
+      // res.send(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
+
+      // console.log(userId);
+      console.log(result);
+
+      res.render('inventory', {
+        userId: userId,
+        practices: result
+      })
+    }
+  })
+})
+
 app.get("/success", function(req, res) {
   isLogin = 0;
   res.sendFile(path.join(__dirname, 'views/success.html'));
