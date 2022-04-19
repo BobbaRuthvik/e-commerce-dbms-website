@@ -14,6 +14,7 @@ const Register = require('./models/register.model');
 const Cart = require('./models/cart.model')
 
 // global variables for user
+var newUser = 0;
 var isLogin = 0;
 var flag = 0;
 var loginDetails = {
@@ -424,7 +425,11 @@ app.get("/products", function(req, res) {
 })
 
 app.get("/signup", function(req, res) {
-  res.sendFile(path.join(__dirname, 'views/signup.html'));
+  // res.sendFile(path.join(__dirname, 'views/signup.html'));
+  res.render('signup', {
+    // userId: userId,
+    newUser: newUser
+  })
 })
 
 app.post("/signup", async (req, res) => {
@@ -454,6 +459,7 @@ app.post("/signup", async (req, res) => {
 })
 
 app.get("/login", function(req, res) {
+  newUser = 0;
   loginDetails = {
     id: "NULL",
     name: "NULL",
@@ -493,6 +499,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else if (!doc) {
       console.log('User details unavailable');
+      newUser = 1;
       res.redirect('/signup');
     } else {
       // isLogin = 1;

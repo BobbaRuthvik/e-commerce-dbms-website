@@ -13,6 +13,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="index.css" rel="stylesheet" type="text/css" />
 
+  <style media="screen">
+    .alert {
+      padding: 20px;
+      background-color: #069A8E;
+      color: white;
+    }
+
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .closebtn:hover {
+      color: black;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -36,6 +59,12 @@
   </nav>
   <br><br><br>
   <div class="container signup">
+    <%if(newUser==1){%>
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Welcome!</strong> Please register to get access to wonderful products.
+    </div>
+    <%}%>
     <div class="row">
       <div class="col-xs-4"></div>
       <div class="col-xs-4 form">
