@@ -203,6 +203,47 @@ app.get('/createtables', (req, res) => {
   });
 });
 
+// transaction
+app.get('/transaction', (req, res) => {
+  var userId = loginDetails.id;
+
+  Cart.find({}, function(err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+
+      // res.send(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
+
+      console.log(userId);
+      console.log(result);
+      result.forEach(function(singleResult){
+        if(userId == singleResult.buyer_id){
+          var currentPrice = singleResult.product_price;
+          var currentSellerId = singleResult.seller_id;
+          // let sql = `SELECT * FROM user WHERE username = "${req.params.username}"`;
+          // mysqlConnection.query(sql, (err, result) => {
+          //   if (err) throw err;
+          //   console.log(result);
+          //   res.send(result);
+          // });
+          let sql = 'UPDATE buyer SET b_balance = buyer.b_balance - ${currentPrice} WHERE idbuyer = "${userId}"; UPDATE seller SET s_balance = seller.s_balance + ${currentPrice} WHERE idseller = "${currentSellerId}";';
+          mysqlConnection.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log(result);
+            // res.send(result);
+            res.redirect('/success');
+          });
+        }
+      })
+      // res.render('cart', {
+      //   userId: userId,
+      //   practices: result
+      // })
+    }
+  })
+});
+
 // Insert an user
 app.get('/adduser', (req, res) => {
   let data = {
@@ -450,9 +491,43 @@ app.post("/signup", async (req, res) => {
 
     const registered = await registerUser.save();
     console.log(registerUser);
+
+    ////////////////////////////////////////////////////
+    Register.findOne({
+      email: req.body.email
+    }, (err, doc) => {
+      if (err) {
+        console.log(err);
+      } else if (!doc) {
+        console.log('User details unavailable');
+        // newUser = 1;
+        // res.redirect('/signup');
+        res.send('User details unavailable');
+      } else {
+
+        if (doc.type === "buyer") {
+          // res.redirect('/products');
+          // INSERT INTO buyer VALUES ("624ecace19326b6e224c7b8b", 5000);
+          let sql = `INSERT INTO buyer VALUES ("${doc.id}", 10000);`;
+          mysqlConnection.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log(result);
+            res.redirect("/login");
+          });
+        }
+        if (doc.type === "seller") {
+          let sql = `INSERT INTO seller VALUES ("${doc.id}", 0);`;
+          mysqlConnection.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log(result);
+            res.redirect("/login");
+          });
+        }
+      }
+    })
     // res.send(registerUser.type);
     // res.status(201).render("views/index.html");
-    res.redirect("/login");
+    // res.redirect("/login");
   } catch (error) {
     res.status(400).send(error);
   }
