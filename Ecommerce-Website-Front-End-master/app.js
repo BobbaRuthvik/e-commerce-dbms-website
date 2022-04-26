@@ -61,56 +61,9 @@ mysqlConnection.connect((err) => {
   }
 })
 
-
-// var connection;
-//
-// function handleDisconnect() {
-//   connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
-//                                                   // the old one cannot be reused.
-//
-//   connection.connect(function(err) {              // The server is either down
-//     if(err) {                                     // or restarting (takes a while sometimes).
-//       console.log('error when connecting to db:', err);
-//       setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-//     }                                     // to avoid a hot loop, and to allow our node script to
-//   });                                     // process asynchronous requests in the meantime.
-//                                           // If you're also serving http, display a 503 error.
-//   connection.on('error', function(err) {
-//     console.log('db error', err);
-//     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-//       handleDisconnect();                         // lost due to either server restart, or a
-//     } else {                                      // connnection idle timeout (the wait_timeout
-//       throw err;                                  // server variable configures this)
-//     }
-//   });
-// }
-//
-// handleDisconnect();
-
-// var connection;
-//
-// function handleDisconnect() {
-//   connection = mysql.createConnection(mysqlConnection); // Recreate the connection, since
-//                                                   // the old one cannot be reused.
-//
-//   connection.connect(function(err) {              // The server is either down
-//     if(err) {                                     // or restarting (takes a while sometimes).
-//       console.log('error when connecting to db:', err);
-//       setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-//     }                                     // to avoid a hot loop, and to allow our node script to
-//   });                                     // process asynchronous requests in the meantime.
-//                                           // If you're also serving http, display a 503 error.
-//   connection.on('error', function(err) {
-//     console.log('db error', err);
-//     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-//       handleDisconnect();                         // lost due to either server restart, or a
-//     } else {                                      // connnection idle timeout (the wait_timeout
-//       throw err;                                  // server variable configures this)
-//     }
-//   });
-// }
-//
-// handleDisconnect();
+setInterval(()=>{
+  mysqlConnection.query("SELECT 1");
+}, 5000)
 
 //connect with mongodb
 mongoose.connect('mongodb+srv://dbmsKali:2455bobba@dbmskali.biyrt.mongodb.net/E-commerce', {
@@ -303,6 +256,18 @@ app.get("/wallet", function(req, res) {
   var balance = -1;
   // find balance here pass it to variablr balance
   res.render('wallet');
+})
+
+app.get("/price", function(req, res) {
+  var userId = loginDetails.id;
+  let newBalance = 50;
+  let sql = `SELECT b_balance from buyer where idbuyer = "624ecace19326b6e224c7b8b";`;
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    result=JSON.stringify(result);
+    console.log(result);
+    res.send(result);
+  });
 })
 
 app.get("/inventory", function(req, res) {
