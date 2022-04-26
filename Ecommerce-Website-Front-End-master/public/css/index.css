@@ -6,13 +6,13 @@ body{
 a{
     text-decoration: none;
     background-color: transparent;
-    color:#ededed;
+    color:#101010;
  }
  .content{
     min-height: 600px;
  }
  .banner-image{
-   padding-top: 75px; 
+   padding-top: 75px;
    padding-bottom: 50px;
    margin-bottom: 20px;
    text-align: center;

@@ -174,25 +174,26 @@ app.get('/transaction', (req, res) => {
         if(userId == singleResult.buyer_id){
           var currentPrice = singleResult.product_price;
           var currentSellerId = singleResult.seller_id;
-          // let sql = `SELECT * FROM user WHERE username = "${req.params.username}"`;
-          // mysqlConnection.query(sql, (err, result) => {
-          //   if (err) throw err;
-          //   console.log(result);
-          //   res.send(result);
-          // });
-          let sql = 'UPDATE buyer SET b_balance = buyer.b_balance - ${currentPrice} WHERE idbuyer = "${userId}"; UPDATE seller SET s_balance = seller.s_balance + ${currentPrice} WHERE idseller = "${currentSellerId}";';
+          var productId = singleResult._id;
+
+          let sql = `UPDATE buyer SET b_balance = buyer.b_balance - ${currentPrice} WHERE idbuyer = "${userId}"; UPDATE seller SET s_balance = seller.s_balance + ${currentPrice} WHERE idseller = "${currentSellerId}";`;
           mysqlConnection.query(sql, (err, result) => {
             if (err) throw err;
             console.log(result);
-            // res.send(result);
-            res.redirect('/success');
+            // result.deleteOne({ "_id": productId });
+            // result.deleteOne({ "_id": productId }, function(error1, result1){
+            Cart.deleteOne({ "_id": productId }, function(error1, result1){
+              if(error1){
+                console.log(error1);
+              }
+              else{
+                res.redirect('/success');
+              }
+            });
           });
         }
       })
-      // res.render('cart', {
-      //   userId: userId,
-      //   practices: result
-      // })
+
     }
   })
 });
@@ -255,7 +256,75 @@ app.get("/wallet", function(req, res) {
   var userId = loginDetails.id;
   var balance = -1;
   // find balance here pass it to variablr balance
-  res.render('wallet');
+  // res.render('wallet');
+
+  var userId = loginDetails.id;
+  let newBalance = 50;
+  let sql = `SELECT s_balance from seller where idseller = "${userId}";`;
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    result=JSON.stringify(result);
+    console.log(result);
+    // res.send(result);
+    var total = "";
+    var local_flag = 0;
+    for(var i=0; i<result.length; i++){
+      if (result[i] === ':') {
+        local_flag = 1;
+      }
+      else if (result[i] === '}') {
+        console.log("found");
+        local_flag = 0;
+      }
+      else if(local_flag === 1){
+        total += result[i];
+      }
+      // console.log(result[i]);
+    }
+    // res.send(total);
+    // res.render('wallet');
+    res.render('wallet', {
+      total: total
+    })
+  });
+})
+
+
+app.get("/bwallet", function(req, res) {
+  var userId = loginDetails.id;
+  var balance = -1;
+  // find balance here pass it to variablr balance
+  // res.render('wallet');
+
+  var userId = loginDetails.id;
+  let newBalance = 50;
+  let sql = `SELECT b_balance from buyer where idbuyer = "${userId}";`;
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    result=JSON.stringify(result);
+    console.log(result);
+    // res.send(result);
+    var total = "";
+    var local_flag = 0;
+    for(var i=0; i<result.length; i++){
+      if (result[i] === ':') {
+        local_flag = 1;
+      }
+      else if (result[i] === '}') {
+        console.log("found");
+        local_flag = 0;
+      }
+      else if(local_flag === 1){
+        total += result[i];
+      }
+      // console.log(result[i]);
+    }
+    // res.send(total);
+    // res.render('wallet');
+    res.render('bwallet', {
+      total: total
+    })
+  });
 })
 
 app.get("/price", function(req, res) {
@@ -266,7 +335,23 @@ app.get("/price", function(req, res) {
     if (err) throw err;
     result=JSON.stringify(result);
     console.log(result);
-    res.send(result);
+    // res.send(result);
+    var total = "";
+    var local_flag = 0;
+    for(var i=0; i<result.length; i++){
+      if (result[i] === ':') {
+        local_flag = 1;
+      }
+      else if (result[i] === '}') {
+        console.log("found");
+        local_flag = 0;
+      }
+      else if(local_flag === 1){
+        total += result[i];
+      }
+      // console.log(result[i]);
+    }
+    res.send(total);
   });
 })
 
@@ -338,6 +423,7 @@ app.post("/transaction", function(req, res) {
       // // res.redirect('/seller');
       var seller_id = doc.seller_id;
       var item_price = doc.product_price;
+      res.send(seller_id);
     }
   })
 })
