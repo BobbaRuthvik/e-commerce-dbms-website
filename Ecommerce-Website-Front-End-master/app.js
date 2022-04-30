@@ -739,7 +739,7 @@ app.post("/search_results", function(req, res) {
   console.log(req.body.searchText);
   var searchString = req.body.searchText;
 
-  Cart.find({}, function(err, result) {
+  userModel.find({}, function(err, result) {
     if (err) {
       res.send(err);
     } else {
