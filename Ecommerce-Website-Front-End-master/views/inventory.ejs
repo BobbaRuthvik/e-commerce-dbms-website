@@ -76,6 +76,7 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
+          <li><a href="/users"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a></li>
           <li><a href="/settings"><span class="glyphicon glyphicon-user"></span> Settings </a></li>
           <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
         </ul>
@@ -85,8 +86,9 @@
   <div class="container content">
     <!-- Jumbotron Header -->
     <div class="jumbotron home-spacer" id="products-jumbotron">
-      <h1>Welcome to our Lifestyle Store!</h1>
-      <p>We have the best cameras, watches and shirts for you. No need to hunt around, we have all in one place.</p>
+      <h1>Welcome to our Seller Inventory!</h1>
+      <!-- <p>We have the best cameras, watches and shirts for you. No need to hunt around, we have all in one place.</p> -->
+      <p>We organize all your items and maintain a list of it. So you can easily keep track of them.</p>
 
     </div>
     <hr>
@@ -104,7 +106,7 @@
           <p>Price: Rs. <%=practice.product_price%></p>
         </div>
         <!-- <%console.log("Print ID: " + practice._id)%> -->
-        <button type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button>
+        <!-- <button type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button> -->
       </div>
     </div>
     <% } %>
@@ -112,7 +114,7 @@
 
 
 
-    <div class="col-md-3 col-sm-6 home-feature">
+    <!-- <div class="col-md-3 col-sm-6 home-feature">
       <div class="thumbnail">
         <img src="images/5.jpg" alt="">
         <div class="caption">
@@ -120,7 +122,7 @@
           <p>Price: Rs. 36000.00 </p>
         </div>
       </div>
-    </div>
+    </div> -->
 
 
   </div>

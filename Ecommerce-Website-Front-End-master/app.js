@@ -170,6 +170,7 @@ app.get('/transaction', (req, res) => {
 
       console.log(userId);
       console.log(result);
+      var cartflag = true;
       result.forEach(function(singleResult){
         if(userId == singleResult.buyer_id){
           var currentPrice = singleResult.product_price;
@@ -187,13 +188,15 @@ app.get('/transaction', (req, res) => {
                 console.log(error1);
               }
               else{
-                res.redirect('/success');
+                cartflag = false;
+                // res.redirect('/success');
               }
             });
           });
         }
       })
-
+      // if(cartflag===false)
+        res.redirect('/success');
     }
   })
 });
@@ -559,7 +562,7 @@ app.post("/signup", async (req, res) => {
         if (doc.type === "buyer") {
           // res.redirect('/products');
           // INSERT INTO buyer VALUES ("624ecace19326b6e224c7b8b", 5000);
-          let sql = `INSERT INTO buyer VALUES ("${doc.id}", 10000);`;
+          let sql = `INSERT INTO buyer VALUES ("${doc.id}", 100000);`;
           mysqlConnection.query(sql, (err, result) => {
             if (err) throw err;
             console.log(result);
