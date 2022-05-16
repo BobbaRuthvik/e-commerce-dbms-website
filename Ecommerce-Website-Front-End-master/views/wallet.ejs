@@ -16,7 +16,11 @@
   <link href="css/wallet.css" rel="stylesheet" type="text/css" />
 
   <style media="screen">
-
+  .banking-image{
+    float: right;
+    margin-right: 350px;
+    margin-top: 30px;
+  }
   </style>
 
 
@@ -24,7 +28,6 @@
 </head>
 
 <body>
-
 
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -57,12 +60,13 @@
 
     <div class="container d-flex justify-content-center wallet">
       <div class="card p-3">
+        <img class="banking-image" src="images/banking.png" alt="Balance" height="200px" width="200px">
         <div class="d-flex flex-row justify-content-between text-align-center"> <img src="https://imgur.com/vvK2ARv.png"> <i class="fas fa-ellipsis-v"></i> </div>
         <p class="text-dark">Elementery Business Account</p>
         <div class="card-bottom pt-3 px-3 mb-2">
           <div class="d-flex flex-row justify-content-between text-align-center">
             <div class="d-flex flex-column"><span>Balance amount</span>
-              <p>&#x20B9; <span class="text-white"><%=total%></span></p>
+              <p>&#x20B9; <span class="text-white"><b><%=total%></b></span></p>
             </div>
           </div>
         </div>
@@ -75,7 +79,7 @@
   <footer>
     <div class="container">
       <center>
-        <p>Copyright © Lifestyle Store. All Rights
+        <p style="color:#D0C9C0;">Copyright © Lifestyle Store. All Rights
           Reserved | Contact Us: +91 90000 00000”. </p>
       </center>
     </div>

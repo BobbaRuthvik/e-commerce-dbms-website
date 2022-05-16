@@ -1,4 +1,8 @@
 .wallet{
-  padding-top: 120px;
-  padding-left: 420px;
+  border-radius: 25px;
+  padding-top: 80px;
+  padding-bottom: 20px;
+  margin-top: 20px;
+  padding-left: 240px;
+  background-color: #F1EEE9;
 }
