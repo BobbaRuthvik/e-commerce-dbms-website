@@ -15,6 +15,11 @@
   <link href="css/index.css" rel="stylesheet" type="text/css" />
 
   <style media="screen">
+
+    body{
+      background-color: rgba(227, 185, 90, 0.23);
+    }
+
     .search_bar {
       padding-left: 400px;
     }
@@ -91,7 +96,7 @@
   </nav>
   <div class="container content">
     <!-- Jumbotron Header -->
-    <div class="jumbotron home-spacer" id="products-jumbotron">
+    <div style="background-color: #E9CE93;" class="jumbotron home-spacer" id="products-jumbotron">
       <h1>Welcome to our Lifestyle Store!</h1>
       <p>We have the best cameras, watches and shirts for you. No need to hunt around, we have all in one place.</p>
 
@@ -110,7 +115,7 @@
           <p>Price: Rs. <%=practice.product_price%></p>
         </div>
         <!-- <%console.log("Print ID: " + practice._id)%> -->
-        <button type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button>
+        <button style="background-color:rgba(227, 185, 90, 0.23); border:rgba(227, 185, 90, 0.23);" type="button" name="addToCart"><a href="/check/<%=practice._id%>">Add to Cart</a></button>
       </div>
     </div>
     <% }) %>
